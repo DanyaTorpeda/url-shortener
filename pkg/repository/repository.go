@@ -13,6 +13,7 @@ const (
 type Shortener interface {
 	CreateLongURL(input shortener.URL) (int, error)
 	AddShortURL(id int, shortURL string) error
+	GetLongURL(id int) (string, error)
 }
 
 type Repository struct {

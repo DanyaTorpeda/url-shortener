@@ -20,7 +20,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	api := router.Group("/api")
 	{
 		api.POST("/shorten", h.createShortURL)
-		api.GET("/:shorten_url", h.redirectURL)
+		api.GET("/:short_url", h.redirectURL)
 	}
 
 	return router

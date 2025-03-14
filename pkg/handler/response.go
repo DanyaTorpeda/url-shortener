@@ -18,3 +18,12 @@ func newErrorMessage(c *gin.Context, code int, message string) {
 	}).Error(message)
 	c.AbortWithStatusJSON(code, errorMessage{Message: message, Code: code})
 }
+
+type APIResponse struct {
+	Status string      `json:"status"`
+	Data   interface{} `json:"data"`
+}
+
+func newAPIResponse(status string, data interface{}) *APIResponse {
+	return &APIResponse{Status: status, Data: data}
+}

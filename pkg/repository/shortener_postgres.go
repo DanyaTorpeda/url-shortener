@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	shortener "url-shortener"
 
@@ -27,5 +28,30 @@ func (r *ShortenerPostgres) CreateLongURL(input shortener.URL) (int, error) {
 }
 
 func (r *ShortenerPostgres) AddShortURL(id int, shortURL string) error {
+	query := fmt.Sprintf("UPDATE %s SET short_url = $1 WHERE id = $2", urlsTable)
+	res, err := r.db.Exec(query, shortURL, id)
+	if err != nil {
+		return err
+	}
 
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("nothing updated")
+	}
+
+	return nil
+}
+
+func (r *ShortenerPostgres) GetLongURL(id int) (string, error) {
+	query := fmt.Sprintf("SELECT long_url FROM %s WHERE id = $1", urlsTable)
+	var longURL string
+	if err := r.db.Get(&longURL, query, id); err != nil {
+		return "", err
+	}
+
+	return longURL, nil
 }

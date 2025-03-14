@@ -6,7 +6,8 @@ import (
 )
 
 type Shortener interface {
-	Create(input shortener.URL) (int, error)
+	CreateShortURL(input shortener.URL) (string, error)
+	GetLongURL(shortURL string) (string, error)
 }
 
 type Service struct {
@@ -14,5 +15,7 @@ type Service struct {
 }
 
 func NewService(repo *repository.Repository) *Service {
-	return &Service{}
+	return &Service{
+		Shortener: NewShortenerService(repo.Shortener),
+	}
 }
